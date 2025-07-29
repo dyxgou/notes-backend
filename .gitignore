@@ -1,0 +1,4 @@
+.env
+bin/
+database.db
+test.db
