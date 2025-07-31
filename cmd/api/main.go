@@ -31,7 +31,7 @@ func main() {
 	// middlewares
 	app.Use(helmet.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:4321",
+		AllowOrigins: "http://localhost:4321,https://notas-frontend-theta.vercel.app/",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 	app.Use(logger.New())
