@@ -5,7 +5,7 @@ import (
 )
 
 func (r *Repository) GetStudentsByCourse(courseId int64) ([]domain.Student, error) {
-	query := "SELECT id, name FROM student WHERE course = ?;"
+	query := "SELECT id, name FROM student WHERE course = ? ORDER BY name ASC;"
 
 	rows, err := r.Db.Query(query, courseId)
 	if err != nil {
