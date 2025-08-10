@@ -1,9 +1,21 @@
 package grade
 
-import "github.com/dyxgou/notas/pkg/domain"
+import (
+	"github.com/dyxgou/notas/pkg/domain"
+)
 
 func (r *Repository) GetGradesBySubjectId(subjectId int64) ([]domain.Grade, error) {
-	query := "SELECT id, name FROM grade WHERE subject_id = ?;"
+	query := `
+SELECT
+  id,
+  name,
+  is_final_exam
+FROM
+  grade
+WHERE
+  subject_id = ?
+ORDER BY
+  is_final_exam ASC;`
 
 	rows, err := r.Db.Query(query, subjectId)
 	if err != nil {
@@ -16,7 +28,7 @@ func (r *Repository) GetGradesBySubjectId(subjectId int64) ([]domain.Grade, erro
 	for rows.Next() {
 		var g domain.Grade
 
-		if err := rows.Scan(&g.Id, &g.Name); err != nil {
+		if err := rows.Scan(&g.Id, &g.Name, &g.IsFinalExam); err != nil {
 			return grades, err
 		}
 
