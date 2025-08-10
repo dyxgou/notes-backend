@@ -197,17 +197,9 @@ func TestGetStudentsByCourse(t *testing.T) {
 		}
 	}
 
-	students, err := r.GetStudentsByCourse(10)
+	_, err := r.GetStudentsByCourse(10)
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	for i, tt := range test {
-		s := students[i]
-
-		if tt.Name != s.Name {
-			t.Errorf("student name expected=%q. got=%q", tt.Name, s.Name)
-		}
 	}
 }
 

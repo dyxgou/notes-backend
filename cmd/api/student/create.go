@@ -30,7 +30,7 @@ func (h Handler) Create(c *fiber.Ctx) error {
 		return c.Status(err.Status).JSON(err.ToJSON())
 	}
 
-	return c.JSON(&core.CreateStudentResponse{
+	return c.JSON(&core.StudentResponse{
 		Id:          id,
 		Name:        student.Name,
 		ParentPhone: student.ParentPhone,

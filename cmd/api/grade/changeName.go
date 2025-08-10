@@ -1,7 +1,6 @@
 package grade
 
 import (
-	"log/slog"
 	"net/http"
 
 	"github.com/dyxgou/notas/cmd/api/core"
@@ -14,7 +13,6 @@ func (h *Handler) ChangeName(c *fiber.Ctx) error {
 	if err := c.BodyParser(q); err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(core.ErrToJSON(err))
 	}
-	slog.Info("change grade name", "b", q)
 
 	if err := h.Validate.Struct(q); err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(core.ErrToJSON(err))

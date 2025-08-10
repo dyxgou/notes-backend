@@ -2,7 +2,6 @@ package note
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/dyxgou/notas/cmd/api/core"
 	"github.com/gofiber/fiber/v2"
@@ -18,7 +17,6 @@ func (h *Handler) Get(c *fiber.Ctx) error {
 	if err := h.Validate.Struct(p); err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(core.ErrToJSON(err))
 	}
-	time.Sleep(5 * time.Second)
 
 	note, err := h.NoteService.Get(p.GradeId, p.StudentId)
 	if err != nil {

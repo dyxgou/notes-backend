@@ -10,7 +10,7 @@ func (r *Repository) Get(id int64) (*domain.Grade, error) {
 	row := r.Db.QueryRow(query, id)
 
 	var g domain.Grade
-	err := row.Scan(&g.Id, &g.Name, &g.SubjectId)
+	err := row.Scan(&g.Id, &g.Name, &g.SubjectId, &g.IsFinalExam)
 	if err != nil {
 		return nil, err
 	}
