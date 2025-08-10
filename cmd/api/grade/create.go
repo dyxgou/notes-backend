@@ -20,8 +20,9 @@ func (h *Handler) Create(c *fiber.Ctx) error {
 	}
 
 	grade := &domain.Grade{
-		Name:      p.Name,
-		SubjectId: p.SubjectId,
+		Name:        p.Name,
+		SubjectId:   p.SubjectId,
+		IsFinalExam: p.IsFinalExam,
 	}
 
 	id, err := h.GradeService.Create(grade)

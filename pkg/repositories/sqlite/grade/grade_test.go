@@ -59,7 +59,7 @@ func TestInsertGrade(t *testing.T) {
 	row := r.Db.QueryRow("SELECT * FROM grade WHERE id = ?", id)
 
 	var g domain.Grade
-	if err := row.Scan(&g.Id, &g.Name, &g.SubjectId); err != nil {
+	if err := row.Scan(&g.Id, &g.Name, &g.SubjectId, &g.IsFinalExam); err != nil {
 		t.Fatal(err)
 	}
 
@@ -161,6 +161,37 @@ func TestInsertGradeWhenSubjectFull(t *testing.T) {
 	if err == nil {
 		t.Fatalf("subject inserted when grades were full. grades=%d", tt.subject.Grades)
 	}
+}
+
+func TestInsertFinalExamGrade(t *testing.T) {
+	tt := struct {
+		subject *domain.Subject
+		grade   *domain.Grade
+	}{
+		subject: &domain.Subject{
+			Name:   "Math",
+			Course: 2,
+			Grades: 10,
+			Period: 1,
+		},
+		grade: &domain.Grade{
+			Name: "first exam",
+		},
+	}
+
+	id, err := subjectRepo.Insert(tt.subject)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tt.grade.SubjectId = id
+
+	id, err = r.Insert(tt.grade)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tt.grade.Id = id
 }
 
 func TestChangeName(t *testing.T) {

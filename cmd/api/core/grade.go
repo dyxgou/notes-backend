@@ -1,8 +1,9 @@
 package core
 
 type CreateGradeParams struct {
-	Name      string `json:"name" validate:"required,min=2,max=20"`
-	SubjectId int64  `json:"subject_id" validate:"required"`
+	Name        string `json:"name" validate:"required,min=2,max=20"`
+	SubjectId   int64  `json:"subject_id" validate:"required"`
+	IsFinalExam bool   `json:"is_final_exam"`
 }
 
 type GetGradeByNameAndSubjectIdQuery struct {
