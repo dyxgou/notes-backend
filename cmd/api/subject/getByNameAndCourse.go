@@ -23,5 +23,11 @@ func (h *Handler) GetByNameAndCourse(c *fiber.Ctx) error {
 		return c.Status(err.Status).JSON(err.ToJSON())
 	}
 
-	return c.JSON(subject)
+	return c.JSON(core.SubjectResponse{
+		Id:     subject.Id,
+		Name:   subject.Name,
+		Course: subject.Course,
+		Period: subject.Period,
+		Grades: subject.Grades,
+	})
 }
