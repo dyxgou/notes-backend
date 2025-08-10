@@ -12,7 +12,8 @@ func (r *Router) RegisterUserGroup(router fiber.Router) {
 	router.Delete("/:id", h.Delete)
 	router.Patch("/change/name", h.ChangeName)
 	router.Patch("/change/phone", h.ChangeParentPhone)
-	router.Get("/:id", h.Get)
 	router.Get("/course/:id", h.GetStudentsByCourse)
 	router.Get("/parent/:id", h.GetParentPhone)
+	router.Get("/average/", h.GetStudentAverage)
+	router.Get("/id/:id", h.Get)
 }

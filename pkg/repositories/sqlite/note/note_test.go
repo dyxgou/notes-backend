@@ -1,6 +1,7 @@
 package note
 
 import (
+	"log/slog"
 	"os"
 	"testing"
 
@@ -221,4 +222,207 @@ func TestChangeValue(t *testing.T) {
 	if err := r.ChangeValue(note.Id, 50); err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestGetStudentAverage(t *testing.T) {
+	const COURSE byte = 0
+	const PERIOD byte = 1
+
+	tt := struct {
+		student *domain.Student
+		subject *domain.Subject
+		grades  []domain.Grade
+		notes   []domain.Note
+	}{
+		student: &domain.Student{
+			Name:        "AlejandroPrueba",
+			ParentPhone: "1231231231",
+			Course:      COURSE,
+		},
+		subject: &domain.Subject{
+			Name:   "social",
+			Course: COURSE,
+			Period: PERIOD,
+		},
+		grades: []domain.Grade{
+			{
+				Name: "Nota 1",
+			},
+			{
+				Name: "Nota 2",
+			},
+			{
+				Name: "Nota 3",
+			},
+			{
+				Name:        "Examen Final",
+				IsFinalExam: true,
+			},
+		},
+		notes: []domain.Note{
+			{
+				Value: 40,
+			},
+			{
+				Value: 41,
+			},
+			{
+				Value: 42,
+			},
+			{
+				Value: 43,
+			},
+		},
+	}
+
+	subjectId, err := subjectRepo.Insert(tt.subject)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	slog.Info("get student average", "subjectId", subjectId)
+
+	studentId, err := studentRepo.Insert(tt.student)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	slog.Info("get student average", "studentId", studentId)
+
+	var average float64
+	for i, g := range tt.grades {
+		n := tt.notes[i]
+
+		slog.Info("calc student average", "n", n)
+		if g.IsFinalExam {
+			average += float64(n.Value) * 0.3
+		} else {
+			average += (float64(n.Value) * 0.7) / float64(len(tt.notes))
+		}
+
+		if err := insertGradeAndNote(&g, &n, studentId, subjectId); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	const epsilon = 0.01
+
+	studentAverage, err := studentRepo.GetStudentAverage(studentId, subjectId)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if average-studentAverage > epsilon {
+		t.Fatalf("student average expected=%f. got=%f", average, studentAverage)
+	}
+
+	slog.Info("student average", "avg", average)
+}
+
+func TestGetAllStudentNotes(t *testing.T) {
+	const COURSE byte = 8
+	const PERIOD byte = 2
+
+	tt := struct {
+		student *domain.Student
+		subject *domain.Subject
+		grades  []domain.Grade
+		notes   []domain.Note
+	}{
+		student: &domain.Student{
+			Name:        "AlejandroPrueba",
+			ParentPhone: "1231231231",
+			Course:      COURSE,
+		},
+		subject: &domain.Subject{
+			Name:   "social",
+			Course: COURSE,
+			Period: PERIOD,
+		},
+		grades: []domain.Grade{
+			{
+				Name: "Nota 1",
+			},
+			{
+				Name: "Nota 2",
+			},
+			{
+				Name: "Nota 3",
+			},
+			{
+				Name:        "Examen Final",
+				IsFinalExam: true,
+			},
+		},
+		notes: []domain.Note{
+			{
+				Value: 40,
+			},
+			{
+				Value: 41,
+			},
+			{
+				Value: 42,
+			},
+			{
+				Value: 43,
+			},
+		},
+	}
+
+	subjectId, err := subjectRepo.Insert(tt.subject)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	studentId, err := studentRepo.Insert(tt.student)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for i, g := range tt.grades {
+		n := tt.notes[i]
+
+		if err := insertGradeAndNote(&g, &n, subjectId, studentId); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	notes, err := r.GetAllStudentNotes(studentId, subjectId)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for i, n1 := range notes {
+		n2 := tt.notes[i]
+
+		if n1.Value != n2.Value {
+			t.Fatalf("note value expected=%d. got=%d", n2.Value, n1.Value)
+		}
+	}
+}
+
+func insertGradeAndNote(g *domain.Grade, n *domain.Note, studentId, subjectId int64) error {
+	g.SubjectId = subjectId
+
+	gradeId, err := gradeRepo.Insert(g)
+	if err != nil {
+		return err
+	}
+
+	n.GradeId = gradeId
+	n.StudentId = studentId
+
+	id, err := r.Insert(n)
+	if err != nil {
+		return err
+	}
+
+	err = r.ChangeValue(id, n.Value)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

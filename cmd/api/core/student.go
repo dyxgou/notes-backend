@@ -6,7 +6,12 @@ type CreateStudentParams struct {
 	ParentPhone string `json:"parent_phone" validate:"required,len=10"`
 }
 
-type CreateStudentResponse struct {
+type GetStudentAverageQuery struct {
+	StudentId int64 `query:"student_id" validate:"required"`
+	SubjectId int64 `query:"subject_id" validate:"required"`
+}
+
+type StudentResponse struct {
 	Id          int64  `json:"id,omitempty"`
 	Name        string `json:"name"`
 	Course      byte   `json:"course"`
