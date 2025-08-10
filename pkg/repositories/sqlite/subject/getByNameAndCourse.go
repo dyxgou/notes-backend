@@ -9,7 +9,7 @@ func (r *Repository) GetByNameAndCourse(name string, course, period byte) (*doma
 
 	var s domain.Subject
 
-	err := row.Scan(&s.Id, &s.Name, &s.Course, &s.Period, &s.Grades)
+	err := row.Scan(&s.Id, &s.Name, &s.Course, &s.Period, &s.HasFinalExam, &s.Grades)
 	if err != nil {
 		return nil, err
 	}

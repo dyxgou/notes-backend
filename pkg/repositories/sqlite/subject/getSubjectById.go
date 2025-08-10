@@ -7,7 +7,7 @@ func (r *Repository) GetSubjectById(id int64) (*domain.Subject, error) {
 
 	var s domain.Subject
 	err := r.Db.QueryRow(q, id).Scan(
-		&s.Id, &s.Name, &s.Course, &s.Period, &s.Grades,
+		&s.Id, &s.Name, &s.Course, &s.Period, &s.HasFinalExam, &s.Grades,
 	)
 	if err != nil {
 		return nil, err
