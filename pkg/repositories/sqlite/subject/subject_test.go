@@ -82,3 +82,34 @@ func TestGetByNameAndCourse(t *testing.T) {
 		t.Fatalf("subject period expected=%q. got=%q", tt.Period, subject.Period)
 	}
 }
+
+func TestGetByCourseAndPeriod(t *testing.T) {
+	tt := &domain.Subject{
+		Name:   "Project",
+		Course: 0,
+		Period: 2,
+		Grades: 1,
+	}
+
+	id, err := r.Insert(tt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tt.Id = id
+
+	subjects, err := r.GetByCourseAndPeriod(tt.Course, tt.Period)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(subjects) != 1 {
+		t.Fatalf("invalid subjects length. expected=%d. got=%d", 1, len(subjects))
+	}
+
+	s := subjects[0]
+
+	if s.Name != tt.Name {
+		t.Fatalf("subject name expected=%q. got=%q", tt.Name, s.Name)
+	}
+}
