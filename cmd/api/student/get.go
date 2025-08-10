@@ -8,16 +8,21 @@ import (
 )
 
 func (h *Handler) Get(c *fiber.Ctx) error {
-	s := new(core.IdParam)
+	p := new(core.IdParam)
 
-	if err := c.ParamsParser(s); err != nil {
+	if err := c.ParamsParser(p); err != nil {
 		return c.Status(http.StatusUnprocessableEntity).JSON(core.ErrToJSON(err))
 	}
 
-	student, err := h.StudentService.Get(s.Id)
+	s, err := h.StudentService.Get(p.Id)
 	if err != nil {
 		return c.Status(err.Status).JSON(err.ToJSON())
 	}
 
-	return c.JSON(student)
+	return c.JSON(core.StudentResponse{
+		Id:          s.Id,
+		Name:        s.Name,
+		Course:      s.Course,
+		ParentPhone: s.ParentPhone,
+	})
 }
