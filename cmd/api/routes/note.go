@@ -10,5 +10,6 @@ func (r *Router) RegisterNoteGroup(router fiber.Router) {
 
 	router.Post("/", h.Create)
 	router.Get("/", h.Get)
+	router.Get("/all/", h.GetAllStudentNotes)
 	router.Patch("/", h.ChangeValue)
 }
