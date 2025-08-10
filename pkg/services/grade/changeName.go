@@ -1,12 +1,14 @@
 package grade
 
-import "github.com/dyxgou/notas/pkg/domain"
+import (
+	"github.com/dyxgou/notas/pkg/apperrors"
+)
 
-func (s *Service) ChangeName(id int64, name string) *domain.AppError {
+func (s *Service) ChangeName(id int64, name string) *apperrors.Error {
 	err := s.Repo.ChangeName(id, name)
 
 	if err != nil {
-		return domain.NewError(err)
+		return apperrors.NewError(err)
 	}
 
 	return nil

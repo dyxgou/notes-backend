@@ -4,11 +4,12 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/dyxgou/notas/pkg/apperrors"
 	"github.com/dyxgou/notas/pkg/domain"
 )
 
 func (s *Service) CreateAndGetSubject(subject *domain.Subject) (
-	*domain.Subject, *domain.AppError,
+	*domain.Subject, *apperrors.Error,
 ) {
 	sub, err := s.Repo.GetByNameAndCourse(
 		subject.Name, subject.Course, subject.Period,
@@ -18,18 +19,18 @@ func (s *Service) CreateAndGetSubject(subject *domain.Subject) (
 		if errors.Is(err, sql.ErrNoRows) {
 			id, err := s.Repo.Insert(subject)
 			if err != nil {
-				return nil, domain.NewError(err)
+				return nil, apperrors.NewError(err)
 			}
 
 			sub, err := s.Repo.GetSubjectById(id)
 			if err != nil {
-				return nil, domain.NewError(err)
+				return nil, apperrors.NewError(err)
 			}
 
 			return sub, nil
 		}
 
-		return nil, domain.NewError(err)
+		return nil, apperrors.NewError(err)
 	}
 
 	return sub, nil

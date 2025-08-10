@@ -1,12 +1,14 @@
 package note
 
-import "github.com/dyxgou/notas/pkg/domain"
+import (
+	"github.com/dyxgou/notas/pkg/apperrors"
+)
 
-func (s *Service) ChangeValue(id int64, value byte) *domain.AppError {
+func (s *Service) ChangeValue(id int64, value byte) *apperrors.Error {
 	err := s.Repo.ChangeValue(id, value)
 
 	if err != nil {
-		return domain.NewError(err)
+		return apperrors.NewError(err)
 	}
 
 	return nil

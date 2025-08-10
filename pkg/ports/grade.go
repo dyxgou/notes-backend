@@ -1,12 +1,15 @@
 package ports
 
-import "github.com/dyxgou/notas/pkg/domain"
+import (
+	"github.com/dyxgou/notas/pkg/apperrors"
+	"github.com/dyxgou/notas/pkg/domain"
+)
 
 type GradeService interface {
-	Create(grade *domain.Grade) (int64, *domain.AppError)
-	Get(id int64) (*domain.Grade, *domain.AppError)
-	GetGradesBySubjectId(subjectId int64) ([]domain.Grade, *domain.AppError)
-	ChangeName(id int64, name string) *domain.AppError
+	Create(grade *domain.Grade) (int64, *apperrors.Error)
+	Get(id int64) (*domain.Grade, *apperrors.Error)
+	GetGradesBySubjectId(subjectId int64) ([]domain.Grade, *apperrors.Error)
+	ChangeName(id int64, name string) *apperrors.Error
 }
 
 type GradeRespository interface {

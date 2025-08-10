@@ -1,4 +1,4 @@
-package domain
+package apperrors
 
 import (
 	"database/sql"
@@ -10,19 +10,19 @@ import (
 	"github.com/mattn/go-sqlite3"
 )
 
-type AppError struct {
+type Error struct {
 	Msg    error
 	Status int
 }
 
-func NewError(err error) *AppError {
-	e := &AppError{Msg: err}
+func NewError(err error) *Error {
+	e := &Error{Msg: err}
 	e.setStatus()
 
 	return e
 }
 
-func (e *AppError) setStatus() {
+func (e *Error) setStatus() {
 	e.Status = http.StatusBadRequest
 
 	var sqlErr sqlite3.Error
@@ -38,13 +38,17 @@ func (e *AppError) setStatus() {
 	if errors.Is(e.Msg, sql.ErrNoRows) {
 		e.Status = http.StatusNotFound
 	}
+
+	if errors.Is(e.Msg, ErrSubjectHasFinalExam) {
+		e.Status = http.StatusConflict
+	}
 }
 
-func (e *AppError) Error() string {
+func (e *Error) Error() string {
 	return e.Msg.Error()
 }
 
-func (e *AppError) ToJSON() *fiber.Map {
+func (e *Error) ToJSON() *fiber.Map {
 	return &fiber.Map{
 		"error": e.Msg.Error(),
 	}
