@@ -10,6 +10,11 @@ type GetNoteParams struct {
 	StudentId int64 `query:"student_id"`
 }
 
+type CreateNoteResponse struct {
+	Id    int64
+	Value byte
+}
+
 type GetAllStudentNotes struct {
 	StudentId int64 `query:"student_id" validate:"required"`
 	SubjectId int64 `query:"subject_id" validate:"required"`
