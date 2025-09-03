@@ -153,7 +153,7 @@ func TestDeleteStudent(t *testing.T) {
 }
 
 func TestGetStudentsByCourse(t *testing.T) {
-	test := []*domain.Student{
+	tests := []*domain.Student{
 		{
 			Name:        generateRandomName("Alejandro1-"),
 			Course:      10,
@@ -190,7 +190,7 @@ func TestGetStudentsByCourse(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	for _, tt := range test {
+	for _, tt := range tests {
 		_, err := r.Insert(tt)
 		if err != nil {
 			t.Fatal(err)

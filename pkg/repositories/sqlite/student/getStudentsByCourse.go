@@ -5,7 +5,7 @@ import (
 )
 
 func (r *Repository) GetStudentsByCourse(courseId int64) ([]domain.Student, error) {
-	query := "SELECT id, name FROM student WHERE course = ? ORDER BY name ASC;"
+	query := "SELECT id, name, parent_phone FROM student WHERE course = ? ORDER BY name ASC;"
 
 	rows, err := r.Db.Query(query, courseId)
 	if err != nil {
@@ -19,7 +19,7 @@ func (r *Repository) GetStudentsByCourse(courseId int64) ([]domain.Student, erro
 	for rows.Next() {
 		var s domain.Student
 
-		err := rows.Scan(&s.Id, &s.Name)
+		err := rows.Scan(&s.Id, &s.Name, &s.ParentPhone)
 		if err != nil {
 			return nil, err
 		}
