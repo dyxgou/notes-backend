@@ -65,21 +65,13 @@ func TestGetByNameAndCourse(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	subject, err := r.GetByNameAndCourse(tt.Name, tt.Course, tt.Period)
+	id, err := r.GetByNameAndCourse(tt.Name, tt.Course, tt.Period)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	if subject.Name != tt.Name {
-		t.Fatalf("subject name expected=%q. got=%q", tt.Name, subject.Name)
-	}
-
-	if subject.Course != tt.Course {
-		t.Fatalf("subject course expected=%q. got=%q", tt.Course, subject.Course)
-	}
-
-	if subject.Period != tt.Period {
-		t.Fatalf("subject period expected=%q. got=%q", tt.Period, subject.Period)
+	if id == 0 {
+		t.Fatalf("subject id invalid. got=%d", id)
 	}
 }
 

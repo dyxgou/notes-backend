@@ -9,9 +9,9 @@ import (
 )
 
 func (s *Service) CreateAndGetSubject(subject *domain.Subject) (
-	*domain.Subject, *apperrors.Error,
+	int64, *apperrors.Error,
 ) {
-	sub, err := s.Repo.GetByNameAndCourse(
+	id, err := s.Repo.GetByNameAndCourse(
 		subject.Name, subject.Course, subject.Period,
 	)
 
@@ -19,19 +19,14 @@ func (s *Service) CreateAndGetSubject(subject *domain.Subject) (
 		if errors.Is(err, sql.ErrNoRows) {
 			id, err := s.Repo.Insert(subject)
 			if err != nil {
-				return nil, apperrors.NewError(err)
+				return 0, apperrors.NewError(err)
 			}
 
-			sub, err := s.Repo.GetSubjectById(id)
-			if err != nil {
-				return nil, apperrors.NewError(err)
-			}
-
-			return sub, nil
+			return id, nil
 		}
 
-		return nil, apperrors.NewError(err)
+		return 0, apperrors.NewError(err)
 	}
 
-	return sub, nil
+	return id, nil
 }

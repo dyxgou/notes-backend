@@ -25,16 +25,10 @@ func (h *Handler) CreateAndGetSubject(c *fiber.Ctx) error {
 		Period: s.Period,
 	}
 
-	subject, err := h.SubjectService.CreateAndGetSubject(subject)
+	id, err := h.SubjectService.CreateAndGetSubject(subject)
 	if err != nil {
 		return c.Status(err.Status).JSON(err.ToJSON())
 	}
 
-	return c.JSON(core.SubjectResponse{
-		Id:     subject.Id,
-		Name:   subject.Name,
-		Course: subject.Course,
-		Period: subject.Period,
-		Grades: subject.Grades,
-	})
+	return c.JSON(core.IdBody{Id: id})
 }

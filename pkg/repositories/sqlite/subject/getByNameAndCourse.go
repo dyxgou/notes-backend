@@ -1,18 +1,16 @@
 package subject
 
-import "github.com/dyxgou/notas/pkg/domain"
-
-func (r *Repository) GetByNameAndCourse(name string, course, period byte) (*domain.Subject, error) {
-	query := "SELECT * FROM subject WHERE name = ? AND course = ? AND period = ?;"
+func (r *Repository) GetByNameAndCourse(name string, course, period byte) (int64, error) {
+	query := "SELECT id FROM subject WHERE name = ? AND course = ? AND period = ?;"
 
 	row := r.Db.QueryRow(query, name, course, period)
 
-	var s domain.Subject
+	var id int64
 
-	err := row.Scan(&s.Id, &s.Name, &s.Course, &s.Period, &s.HasFinalExam, &s.Grades)
+	err := row.Scan(&id)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	return &s, nil
+	return id, nil
 }
