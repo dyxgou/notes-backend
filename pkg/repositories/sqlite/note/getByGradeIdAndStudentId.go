@@ -7,12 +7,12 @@ import (
 func (r *Repository) GetByGradeIdAndStudentId(
 	gradeId, studentId int64,
 ) (*domain.Note, error) {
-	query := "SELECT * FROM note WHERE grade_id = ? AND student_id = ?;"
+	query := "SELECT id, value FROM note WHERE grade_id = ? AND student_id = ?;"
 
 	row := r.Db.QueryRow(query, gradeId, studentId)
 
 	var n domain.Note
-	err := row.Scan(&n.Id, &n.GradeId, &n.StudentId, &n.Value)
+	err := row.Scan(&n.Id, &n.Value)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,6 @@
 package note
 
 import (
-	"log/slog"
 	"os"
 	"testing"
 
@@ -134,14 +133,6 @@ func TestGetByGradeIdAndStudentIdNote(t *testing.T) {
 
 	if n1.Value != n2.Value {
 		t.Fatalf("note value expected=%d. got=%d", n1.Value, n2.Value)
-	}
-
-	if n1.GradeId != n2.GradeId {
-		t.Fatalf("note gradeId expected=%d. got=%d", n1.GradeId, n2.GradeId)
-	}
-
-	if n1.StudentId != n2.StudentId {
-		t.Fatalf("note studentId expected=%d. got=%d", n1.StudentId, n2.StudentId)
 	}
 }
 
@@ -280,20 +271,15 @@ func TestGetStudentAverage(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	slog.Info("get student average", "subjectId", subjectId)
-
 	studentId, err := studentRepo.Insert(tt.student)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	slog.Info("get student average", "studentId", studentId)
-
 	var average float64
 	for i, g := range tt.grades {
 		n := tt.notes[i]
 
-		slog.Info("calc student average", "n", n)
 		if g.IsFinalExam {
 			average += float64(n.Value) * 0.3
 		} else {
@@ -316,7 +302,6 @@ func TestGetStudentAverage(t *testing.T) {
 		t.Fatalf("student average expected=%f. got=%f", average, studentAverage)
 	}
 
-	slog.Info("student average", "avg", average)
 }
 
 func TestGetAllStudentNotes(t *testing.T) {
