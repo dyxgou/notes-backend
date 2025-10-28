@@ -66,9 +66,9 @@ func TestInsertWrongStudent(t *testing.T) {
 		s    *domain.Student
 	}{
 		{
-			name: "Name is longer than 30 chars",
+			name: "Name is longer than 40 chars",
 			s: &domain.Student{
-				Name:        strings.Repeat("A", 31),
+				Name:        strings.Repeat("A", 41),
 				Course:      5,
 				ParentPhone: "1231231231",
 			},

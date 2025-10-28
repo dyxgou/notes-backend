@@ -2,7 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS student (
   id INTEGER PRIMARY KEY NOT NULL,
-  name VARCHAR(30) CHECK (LENGTH (name) <= 30),
+  name VARCHAR(40) CHECK (LENGTH (name) <= 40),
   course SMALLINT CHECK (
     course >= 0
     AND course <= 11
