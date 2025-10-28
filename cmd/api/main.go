@@ -54,6 +54,7 @@ func main() {
 	r.RegisterSubjectGroup(api.Group("/subject"))
 	r.RegisterGradeGroup(api.Group("/grade"))
 	r.RegisterNoteGroup(api.Group("/note"))
+	r.RegisterReportGroup(api.Group("/report"))
 
 	// Hooks
 	hooks := app.Hooks()
