@@ -240,3 +240,50 @@ func TestChangeName(t *testing.T) {
 		t.Fatalf("name has not changed. expected=%q. got=%q", tt.expectedName, name)
 	}
 }
+
+func TestDeleteGrade(t *testing.T) {
+	tt := struct {
+		subject *domain.Subject
+		grade   *domain.Grade
+	}{
+		subject: &domain.Subject{
+			Name:   "spanish",
+			Course: 7,
+			Period: 4,
+			Grades: 1,
+		},
+		grade: &domain.Grade{
+			Name: "Semana 1",
+		},
+	}
+
+	id, err := subjectRepo.Insert(tt.subject)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	tt.grade.SubjectId = id
+
+	id, err = r.Insert(tt.grade)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	gradeId, err := r.Delete(id, tt.grade.SubjectId)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if gradeId == 0 {
+		t.Fatalf("grade does not exists. id=%d", id)
+	}
+
+	s, err := subjectRepo.GetSubjectById(tt.grade.SubjectId)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if s.Grades != 0 {
+		t.Fatalf("subject grades amount expected=%d, got=%d", 0, s.Grades)
+	}
+}

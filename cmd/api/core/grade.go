@@ -19,3 +19,8 @@ type ChangeGradeName struct {
 type GetGradeBySubjectId struct {
 	SubjectId int64 `query:"subject_id" validate:"required"`
 }
+
+type DeleteGradeParams struct {
+	GradeId   int64 `query:"grade_id" validate:"required"`
+	SubjectId int64 `query:"subject_id" validate:"required"`
+}

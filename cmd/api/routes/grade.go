@@ -11,5 +11,6 @@ func (r *Router) RegisterGradeGroup(router fiber.Router) {
 	router.Post("/", h.Create)
 	router.Get("/:id", h.Get)
 	router.Get("/", h.GetGradesBySubjectId)
+	router.Delete("/", h.Delete)
 	router.Patch("/name", h.ChangeName)
 }
