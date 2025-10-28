@@ -109,3 +109,93 @@ func TestGetSubjectReport(t *testing.T) {
 	}
 }
 
+func TestGetSubjectAverage(t *testing.T) {
+	tt := struct {
+		studentName    string
+		subjectName    string
+		noteValue      byte
+		subjectAverage byte
+		course         byte
+	}{
+		studentName: "Diego",
+		subjectName: "spanish",
+		noteValue:   20,
+		course:      0,
+	}
+
+	studentId, err := studentRepo.Insert(&domain.Student{
+		Name:        tt.studentName,
+		Course:      tt.course,
+		ParentPhone: "1231231231",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for i := range byte(3) {
+		id, err := subjectRepo.Insert(&domain.Subject{
+			Name:   tt.subjectName,
+			Course: tt.course,
+			Period: i + 1,
+		})
+
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		for j := range byte(10) {
+			g := &domain.Grade{
+				SubjectId: id,
+				Name:      fmt.Sprintf("Semana %d", j),
+			}
+
+			const finalGradeIndex = 10 - 1
+
+			if j == finalGradeIndex {
+				g.IsFinalExam = true
+			}
+
+			gradeId, err := gradeRepo.Insert(g)
+
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			noteId, err := noteRepo.Insert(&domain.Note{
+				GradeId:   gradeId,
+				StudentId: studentId,
+			})
+
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if err := noteRepo.ChangeValue(noteId, tt.noteValue); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+
+	averages, err := r.GetSubjectReport(studentId, tt.subjectName, tt.course)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var expectedAverage float64
+	for _, avg := range averages {
+		expectedAverage += avg
+	}
+
+	expectedAverage = expectedAverage / float64(len(averages))
+
+	avg, err := r.GetSubjectAverage(studentId, tt.subjectName, tt.course)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	epsilon := 0.01
+	if math.Abs(expectedAverage-avg) > epsilon {
+		t.Fatalf("subject average expected=%f. got=%f", expectedAverage, avg)
+	}
+}
