@@ -1,4 +1,5 @@
 .env
+backups/
 bin/
 database.db
 test.db

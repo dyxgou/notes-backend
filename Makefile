@@ -7,6 +7,9 @@ build:
 
 export DB_TEST_PATH=$(shell pwd)/data/test.db
 
+backup:
+	@ sqlite3 ./data/database.db ".backup ./backups/backup-$$(date +%F_%H-%M-%S).db"
+
 test: migrate_test
 	@ go test ./pkg/repositories/sqlite/../... -v
 
