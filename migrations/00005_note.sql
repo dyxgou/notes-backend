@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS note (
     AND value <= 50
   ) DEFAULT 10,
   UNIQUE (grade_id, student_id),
-  FOREIGN KEY (grade_id) REFERENCES grade (id),
+  FOREIGN KEY (grade_id) REFERENCES grade (id) ON DELETE CASCADE,
   FOREIGN KEY (student_id) REFERENCES student (id) ON DELETE CASCADE
 );
 

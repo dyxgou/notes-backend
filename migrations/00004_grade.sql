@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS grade (
   name VARCHAR(20) CHECK (LENGTH (name) <= 20),
   subject_id INTEGER NOT NULL,
   is_final_exam BOOLEAN DEFAULT FALSE,
-  FOREIGN KEY (subject_id) REFERENCES subject (id)
+  FOREIGN KEY (subject_id) REFERENCES subject (id) ON DELETE CASCADE
 );
 
 -- Performance optimization: Add index on subject_id
