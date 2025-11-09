@@ -38,9 +38,9 @@ COPY --from=builder /app/bin/server .
 COPY --from=builder /app/migrations migrations
 COPY --from=builder /goose/goose .
 
-RUN mkdir -p data
 ENV DB_PATH=data/database.db
-COPY /app/data/database.db data/database.db
+COPY --from=builder /app/data/database.db data/database.db
+RUN ls -la data
 VOLUME [ "/data" ]
 
 ENV PORT=:5000
