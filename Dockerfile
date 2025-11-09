@@ -40,13 +40,8 @@ COPY --from=builder /goose/goose .
 
 RUN mkdir -p data
 ENV DB_PATH=data/database.db
+COPY /app/data/database.db data/database.db
 VOLUME [ "/data" ]
-
-ENV GOOSE_DRIVER=sqlite3
-ENV GOOSE_DBSTRING=data/database.db
-ENV GOOSE_MIGRATION_DIR=./migrations
-
-RUN ./goose up
 
 ENV PORT=:5000
 
