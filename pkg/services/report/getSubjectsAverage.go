@@ -11,6 +11,10 @@ func (s *Service) GetSubjectsAverage(
 	course byte,
 	names []string,
 ) (float64, *apperrors.Error) {
+	if len(names) == 0 {
+		return 10.0, nil
+	}
+
 	var average float64
 
 	for _, name := range names {
@@ -20,10 +24,6 @@ func (s *Service) GetSubjectsAverage(
 		}
 
 		average += avg
-	}
-
-	if len(names) == 0 {
-		return 10.0, nil
 	}
 
 	rnd := math.Round(average / float64(len(names)))
